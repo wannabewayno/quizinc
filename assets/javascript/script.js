@@ -7,6 +7,7 @@ var question = document.getElementById("question");
 var answerBox = document.getElementById("answer-box");
 var validationBox = document.getElementById("validation-box");
 var validationContent =document.getElementById("validation-content");
+var startQuiz = document.getElementById("start-quiz");
 
 //Variables
 var time = 10;
@@ -20,7 +21,9 @@ function startTimer(){
         if (time === 0){
             clearInterval(interval);
         }
+        timeLeft.textContent = time;
     },1000);
 }
 
 //event listeners
+startQuiz.addEventListener("click", startTimer);
