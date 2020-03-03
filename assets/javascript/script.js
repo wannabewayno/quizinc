@@ -25,5 +25,14 @@ function startTimer(){
     },1000);
 }
 
+function collapsePreface(){
+    preface.setAttribute("class", "collapse");
+}
+
+function startQuizProcess(){
+    startTimer();
+    collapsePreface();
+}
+
 //event listeners
-startQuiz.addEventListener("click", startTimer);
+startQuiz.addEventListener("click", startQuizProcess);
