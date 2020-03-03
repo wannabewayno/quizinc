@@ -45,14 +45,74 @@ function startTimer(){
     },1000);
 }
 
+
 function collapsePreface(){
-    preface.setAttribute("class", "collapse");
+    preface.setAttribute("class", "hide");
+    quizContent.setAttribute("class", "show")
 }
+
 
 function startQuizProcess(){
     startTimer();
     collapsePreface();
+    createQuestion(questionNumber);
+}
+
+
+
+function createQuestion(questionNumber) {
+    var selector ="question"+questionNumber;
+    var thisQuestion = quizSource[selector];
+    answers = [];
+    answers = answers.concat(thisQuestion.incorrectAnswers, thisQuestion.correctAnswer)
+    var iterationCount = answers.length
+
+    for (let i = 0; i < iterationCount; i++) {
+        var randomNumber = Math.floor(Math.random()*answers.length)
+        dlEl = document.createElement("button");
+        dlEl.textContent = answers[randomNumber];
+        answers.splice(randomNumber,1);
+        answerBox.appendChild(dlEl);
+    }
+    question.textContent = thisQuestion.question;
+}
+
+function validateQuestion(){
+    var element = event.target;
+    var parent = element.parentElement;
+    selector = "question"+questionNumber
+
+    if (element.matches("button")){
+        removeChildren(parent);
+        validationBox.setAttribute("class","show")
+
+        if(element.textContent === quizSource[selector].correctAnswer[0]){
+            validationContent.textContent = "Correct!"
+        } else {
+            validationContent.textContent = "Wrong bitch!"
+        }
+
+        if(questionNumber === Object.keys(quizSource).length){
+            return
+        }
+        createQuestion(questionNumber+1);
+        questionNumber++;
+
+        var popup = setInterval(function(){
+            validationBox.setAttribute("class","hide")
+            clearInterval(popup);
+        },2000);
+    }
+}
+
+function removeChildren(parent){
+    iterationCount = parent.childElementCount
+    for (let i = 0; i < iterationCount; i++) {
+        child = parent.lastElementChild 
+        parent.removeChild(child);
+    }
 }
 
 //event listeners
 startQuiz.addEventListener("click", startQuizProcess);
+answerBox.addEventListener("click", validateQuestion);
