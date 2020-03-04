@@ -4,30 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quizinc</title>
+    <link rel="stylesheet" href="./assets/resets/reset.css">
     <link rel="stylesheet" href="./assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Oxanium&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <a href="./assets/html/highscores.html">highscores</a>
-        <h id="timer">time:<span id="time"></span></h>
+        <a href="./index.html"><h1>Quizinc</h1></a>
+        <a href="./assets/html/highscores.html">Highscores</a>
     </header>
     <main>
         <section id="preface">
             <article>
-                <h1>
+                <h2>
                     Quizinc's CODE QUIZ!
-                </h1>
-                <p>
-                    <strong>Ready to test your skills?</strong>
-                    press the button to begin!
+                </h2>
+                <p class="preface-text">
+                    This quiz is a timed multiple choice selection. Upon answering one question,
+                    you will be presented with another question. Get a question wrong and time will be subtracted.
+                    Your score will be the number of questions you answered correctly. 
                 </p>
             </article>
+            <label for="start-quiz">Ready to test your skills?</label>
             <button type="submit" id="start-quiz">Start quiz</button>
         </section>
-        
+
         <section id="quiz-content" class="hide">
-            <h2 id="question"></h2>
-            <dl id="answer-box"></dl>
+            <h1 id="timer">Time:<span id="time"></span></h1>
+            <section id="content-box">
+                <h2 id="question"></h2>
+                <ol id="answer-box"></ol>
+            </section>
         </section>
 
         <section id="results" class="hide">
@@ -35,18 +42,17 @@
                 All done!
             </h2>
             <p>your score: <span id="score"></span></p>
-            <input type="text" id="score-name">
+            <input type="text" id="score-name" placeholder="enter your name">
             <button type="submit" id="score-button">Submit</button>
         </section>
 
         <section id="validation-box" class="hide">
             <hr>
-            <p id="validation-content"></p>
+            <span id="validation-content"></span>
         </section>
     </main>
-    <footer>
-
-    </footer>
+   
     <script src="./assets/javascript/script.js"></script>
+    <script src="./assets/javascript/timer.js"></script>
 </body>
 </html>

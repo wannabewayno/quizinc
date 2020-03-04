@@ -12,8 +12,10 @@ var results = document.getElementById("results");
 var finalScore = document.getElementById("score");
 var scoreButton = document.getElementById("score-button");
 var scoreName = document.getElementById("score-name");
+var clearHighScores = document.getElementById("clear-scores");
+var highScores = document.getElementById("highscores");
 
-//Quiz Source Object, contains all quiz questiosn and allowed responses.
+//Quiz Source Object, contains all quiz questions and allowed responses.
 quizSource = {
     question1:{
         question:"how do you define a function argument?",
@@ -28,10 +30,9 @@ quizSource = {
     question3:{
         question:"who is who in the zoo?",
         correctAnswer:["Denise"],
-        incorrectOptions:["Karen","Fran","quasimoto"]
+        incorrectOptions:["Karen","Fran","Michelle"]
     }
 }   
-
 
 //Variables
 var time = 75;
@@ -41,6 +42,7 @@ var score;
 
 //functions
 function startTimer(){
+    timeLeft.textContent = time;
     interval = setInterval(function(){
         time--;
         if (time <= 0){
@@ -86,10 +88,10 @@ function createQuestion(questionNumber) {
     var iterationCount = options.length
     for (let i = 0; i < iterationCount; i++) {
         var randomNumber = Math.floor(Math.random()*options.length)
-        dlEl = document.createElement("button");
-        dlEl.textContent = options[randomNumber];
+        liEl = document.createElement("li");
+        liEl.textContent =options[randomNumber];
         options.splice(randomNumber,1);
-        answerBox.appendChild(dlEl);
+        answerBox.appendChild(liEl);
     }
     question.textContent = thisQuestion.question;
 }
@@ -98,9 +100,11 @@ function createQuestion(questionNumber) {
 function validate(answer,whichQuestion) {
     validationBox.setAttribute("class","show")
     if(answer.textContent === quizSource[whichQuestion].correctAnswer[0]){
+        validationContent.setAttribute("class", "correct")
         validationContent.textContent = "Correct!"
         score++;
     } else {
+        validationContent.setAttribute("class", "incorrect")
         validationContent.textContent = "no no no, you naughty goose"
         time -= 10;
     }
@@ -115,10 +119,11 @@ function validate(answer,whichQuestion) {
 
 function checkAndUpdate(event){
     var answer = event.target;
+    console.log(answer.nodeName);
     var parent = answer.parentElement;
     whichQuestion = "question"+questionNumber
 
-    if (answer.matches("button")){
+    if (answer.matches("li")){
         removeChildren(parent);
         validate(answer,whichQuestion);
 
@@ -141,6 +146,16 @@ function removeChildren(parent){
     }
 }
 
+function addHighScore(){
+    getScores=[];
+    numberOfHighScores = highScores.childElementCount;
+    for (let i = 0; i < numberOfHighScores; i++) {
+        getScores[i]=highScores.childElementNode(i);
+        
+    }
+}
+
 //event listeners
 startQuiz.addEventListener("click", startQuizProcess);
 answerBox.addEventListener("click", checkAndUpdate);
+scoreButton.addEventListener("click", addHighScore);
