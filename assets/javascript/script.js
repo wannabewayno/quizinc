@@ -148,16 +148,32 @@ function removeChildren(parent){
     }
 }
 
-function addHighScore(){
-    getScores=[];
-    numberOfHighScores = highScores.childElementCount;
-    for (let i = 0; i < numberOfHighScores; i++) {
-        getScores[i]=highScores.childElementNode(i);
-        
+function storeScore(){
+    var overide;
+    var storageKeys = Object.keys(localStorage);
+    storageKeys.forEach(element => {
+        if(element ===  scoreName.value){
+           
+            if(confirm("overide "+scoreName.value+"'s previous score?") === true){
+                localStorage.setItem(scoreName.value,score);
+
+            } else {
+
+                overide = false;
+                return;
+            }
+        } 
+    });
+
+    if (overide === false){
+        return;
+    } else {
+        localStorage.setItem(scoreName.value,score);
     }
+    window.location="./assets/html/highscores.html"
 }
 
-//event listeners
+//-----------------------event listeners-------------------
 startQuiz.addEventListener("click", startQuizProcess);
 answerBox.addEventListener("click", checkAndUpdate);
-scoreButton.addEventListener("click", addHighScore);
+scoreButton.addEventListener("click", storeScore);
