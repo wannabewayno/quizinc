@@ -76,6 +76,10 @@ cursor: pointer;
     
 }
 
+#question{
+    font-family: 'Montserrat', sans-serif;
+}
+
 #preface, #content-box, #results, #highscores-box{
     text-align: center;
     border: 4px solid #dbdbdb;
