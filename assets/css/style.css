@@ -52,7 +52,7 @@ header {
     align-items: center;
 }
 
-button, li {
+button, #answer-box>li {
     margin:5px 0;
     padding: 2.5px 5px;
     color: azure;
@@ -62,7 +62,7 @@ button, li {
     transition: 200ms all linear;
     outline:none;
 }
-button:hover, li:hover {
+button:hover, #answer-box>li:hover {
 background-color:hsl(210,13%,35%);
 cursor: pointer;
 }
@@ -71,6 +71,9 @@ cursor: pointer;
     list-style-type: lower-latin;
     list-style-position: inside;
     margin-top: 20px;
+    text-align: left;
+    padding:none;
+    
 }
 
 #preface, #content-box, #results, #highscores-box{
@@ -79,6 +82,21 @@ cursor: pointer;
     border-radius: 10px;
     padding:1rem;
     margin:0 20px;
+}
+
+.preface-text{
+    margin:0 0 15px 0;
+    text-align: center;
+}
+
+.container {
+    padding:20px;
+}
+.flexbox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #validation-content{
@@ -90,6 +108,26 @@ cursor: pointer;
     margin:0 20px;
     padding:1rem;
 }
+
+#highscores>li{
+    text-align: left;
+    list-style-type: decimal;
+    list-style-position: inside;
+    padding:10px;
+    border-radius:5px;
+}
+#highscores {
+    Margin:20px;
+}
+
+.grey-background{
+    background-color: lightgray;
+}
+.white-background {
+    background-color: white;
+
+}
+
 .correct{
     border-radius: 5px;
     background-color:mediumspringgreen;
@@ -101,10 +139,6 @@ cursor: pointer;
     color:#B00E0A
 }
 
-.preface-text{
-    margin:0 0 15px 0;
-    text-align: left;
-}
 #timer{
     text-align: center;
 }
@@ -116,6 +150,10 @@ cursor: pointer;
 }
 
 @media (min-width: 576px) {
+    #answer-box{
+        padding:0 10%;
+    }
+
     main{
         width:80%
     }
@@ -126,6 +164,9 @@ cursor: pointer;
     }
 }
 @media (min-width: 992px) {
+    #answer-box{
+        padding:0 20%;
+    }
     main{
         width:50%
     }
