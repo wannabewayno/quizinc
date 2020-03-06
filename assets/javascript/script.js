@@ -1,4 +1,4 @@
-// Document Handles
+//------------------Document Handles------------------------
 var timer = document.getElementById("timer");
 var timeLeft = document.getElementById("time");
 var preface = document.getElementById("preface");
@@ -12,8 +12,6 @@ var results = document.getElementById("results");
 var finalScore = document.getElementById("score");
 var scoreButton = document.getElementById("score-button");
 var scoreName = document.getElementById("score-name");
-var clearHighScores = document.getElementById("clear-scores");
-var highScores = document.getElementById("highscores");
 
 //Quiz Source Object, contains all quiz questions and allowed responses.
 quizSource = {
@@ -34,13 +32,27 @@ quizSource = {
     }
 }   
 
-//Variables
-var time = 75;
+//Global Variables
+var time = 75; //in seconds
+var timePenalty = 15; //in Seconds
+var popupTime = 1500; //in milliseconds
+//placholders
 var questionNumber;
 var popup;
 var score;
 
-//functions
+
+//---------------------------functions---------------------
+
+function startQuizProcess(){
+    score = 0;
+    questionNumber = 1
+    startTimer();
+    switchToQuiz();
+    createQuestion(questionNumber);
+}
+
+
 function startTimer(){
     timeLeft.textContent = time;
     interval = setInterval(function(){
@@ -66,15 +78,6 @@ function switchToResults(){
     quizContent.setAttribute("class", "hide");
     results.setAttribute("class", "show");
     finalScore.textContent = score;
-}
-
-
-function startQuizProcess(){
-    score = 0;
-    questionNumber = 1
-    startTimer();
-    switchToQuiz();
-    createQuestion(questionNumber);
 }
 
 
@@ -106,7 +109,7 @@ function validate(answer,whichQuestion) {
     } else {
         validationContent.setAttribute("class", "incorrect")
         validationContent.textContent = "no no no, you naughty goose"
-        time -= 10;
+        time -= timePenalty;
     }
 
     clearInterval(popup);
@@ -119,7 +122,6 @@ function validate(answer,whichQuestion) {
 
 function checkAndUpdate(event){
     var answer = event.target;
-    console.log(answer.nodeName);
     var parent = answer.parentElement;
     whichQuestion = "question"+questionNumber
 
