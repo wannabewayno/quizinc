@@ -100,6 +100,25 @@ function createQuestion(questionNumber) {
 }
 
 
+function checkAndUpdate(event){
+    var answer = event.target;
+    var parent = answer.parentElement;
+    whichQuestion = "question"+questionNumber
+
+    if (answer.matches("li")){
+        removeChildren(parent);
+        validate(answer,whichQuestion);
+
+        numberOfQuestions = Object.keys(quizSource).length
+        if(questionNumber === numberOfQuestions) {
+            switchToResults();
+            return;
+        }
+        createQuestion(questionNumber+1);
+        questionNumber++;
+    }
+}
+
 function validate(answer,whichQuestion) {
     validationBox.setAttribute("class","show")
     if(answer.textContent === quizSource[whichQuestion].correctAnswer[0]){
@@ -120,26 +139,6 @@ function validate(answer,whichQuestion) {
 }
 
 
-function checkAndUpdate(event){
-    var answer = event.target;
-    var parent = answer.parentElement;
-    whichQuestion = "question"+questionNumber
-
-    if (answer.matches("li")){
-        removeChildren(parent);
-        validate(answer,whichQuestion);
-
-        numberOfQuestions = Object.keys(quizSource).length
-        if(questionNumber === numberOfQuestions) {
-            switchToResults();
-            return;
-        }
-        createQuestion(questionNumber+1);
-        questionNumber++;
-    }
-}
-
-
 function removeChildren(parent){
     iterationCount = parent.childElementCount
     for (let i = 0; i < iterationCount; i++) {
@@ -149,26 +148,27 @@ function removeChildren(parent){
 }
 
 function storeScore(){
+    var currentScore = score;
+    var userAlias = scoreName.value;
     var overide;
     var storageKeys = Object.keys(localStorage);
     storageKeys.forEach(element => {
-        if(element ===  scoreName.value){
+        var highscore = localStorage.getItem(element)
+        if(element ===  userAlias && currentScore <= highscore ){
            
-            if(confirm("overide "+scoreName.value+"'s previous score?") === true){
-                localStorage.setItem(scoreName.value,score);
+            if(confirm("This score is lower than your current highscore. Overide "+userAlias+"'s previous high score with this lower score?") === true){
+                localStorage.setItem(userAlias,currentScore);
 
             } else {
-
                 overide = false;
-                return;
             }
         } 
     });
 
     if (overide === false){
-        return;
+        window.location="./assets/html/highscores.html"
     } else {
-        localStorage.setItem(scoreName.value,score);
+        localStorage.setItem(userAlias,currentScore);
     }
     window.location="./assets/html/highscores.html"
 }
