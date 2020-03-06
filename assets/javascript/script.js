@@ -3,7 +3,7 @@ var timer = document.getElementById("timer");
 var timeLeft = document.getElementById("time");
 var preface = document.getElementById("preface");
 var quizContent = document.getElementById("quiz-content");
-var question = document.getElementById("question");
+var questionTitle = document.getElementById("question");
 var answerBox = document.getElementById("answer-box");
 var validationBox = document.getElementById("validation-box");
 var validationContent =document.getElementById("validation-content");
@@ -144,26 +144,26 @@ quizSource = {
         question:"what operator do you use to indicate the start of a line",
         correctAnswer:["none"],
         incorrectOptions:["Colon : ","Asterix * ","dollar sign $ ","exclamation mark !"]
+    }
 }   
 
 //Global Variables
 var time = 75; //in seconds
 var timePenalty = 15; //in Seconds
 var popupTime = 1500; //in milliseconds
+var questionArray = Object.keys(quizSource);
 //placholders
-var questionNumber;
+var randomQuestionNumber;
 var popup;
 var score;
-
 
 //---------------------------functions---------------------
 
 function startQuizProcess(){
     score = 0;
-    questionNumber = 1
     startTimer();
     switchToQuiz();
-    createQuestion(questionNumber);
+    createQuestion();
 }
 
 
@@ -195,68 +195,72 @@ function switchToResults(){
 }
 
 
-function createQuestion(questionNumber) {
-    var selectQuestion ="question"+questionNumber;
-    var thisQuestion = quizSource[selectQuestion];
-
+function createQuestion() {
+    randomQuestionNumber = Math.floor(Math.random()*questionArray.length);
+    var selectedQuestion = questionArray[randomQuestionNumber];
+    var questionProperties = quizSource[selectedQuestion];
+    
     options = [];
-    options = options.concat(thisQuestion.incorrectOptions, thisQuestion.correctAnswer)
+    options = options.concat(questionProperties.incorrectOptions, questionProperties.correctAnswer);
 
-    var iterationCount = options.length
+    var iterationCount = options.length;
     for (let i = 0; i < iterationCount; i++) {
-        var randomNumber = Math.floor(Math.random()*options.length)
+        var randomNumber = Math.floor(Math.random()*options.length);
         liEl = document.createElement("li");
         liEl.textContent =options[randomNumber];
         options.splice(randomNumber,1);
         answerBox.appendChild(liEl);
     }
-    question.textContent = thisQuestion.question;
+    questionTitle.textContent = questionProperties.question;
 }
 
 
 function checkAndUpdate(event){
     var answer = event.target;
     var parent = answer.parentElement;
-    whichQuestion = "question"+questionNumber
+    var selectedQuestion = questionArray[randomQuestionNumber];
+    var questionProperties = quizSource[selectedQuestion];
 
     if (answer.matches("li")){
+        validate(answer,questionProperties);
         removeChildren(parent);
-        validate(answer,whichQuestion);
 
-        numberOfQuestions = Object.keys(quizSource).length
-        if(questionNumber === numberOfQuestions) {
+        questionsLeft = questionArray.length
+        if(questionsLeft === 0) {
             switchToResults();
             return;
         }
-        createQuestion(questionNumber+1);
-        questionNumber++;
+        questionArray = questionArray.filter(function(element,index,array){
+            return element !== selectedQuestion;
+        });
+        createQuestion();
     }
 }
 
-function validate(answer,whichQuestion) {
-    validationBox.setAttribute("class","show")
-    if(answer.textContent === quizSource[whichQuestion].correctAnswer[0]){
-        validationContent.setAttribute("class", "correct")
-        validationContent.textContent = "Correct!"
+function validate(answer,questionProperties) {
+    validationBox.setAttribute("class","show");
+    if(answer.textContent === questionProperties.correctAnswer[0]){
+        validationContent.setAttribute("class", "correct");
+        validationContent.textContent = "Correct!";
         score++;
     } else {
-        validationContent.setAttribute("class", "incorrect")
-        validationContent.textContent = "no no no, you naughty goose"
+        validationContent.setAttribute("class", "incorrect");
+        validationContent.textContent = "no no no, you naughty goose";
         time -= timePenalty;
     }
 
     clearInterval(popup);
     popup = setInterval(function(){
-        validationBox.setAttribute("class","hide")
+        validationBox.setAttribute("class","hide");
         clearInterval(popup);
     },2000);
 }
 
 
 function removeChildren(parent){
-    iterationCount = parent.childElementCount
+    iterationCount = parent.childElementCount;
     for (let i = 0; i < iterationCount; i++) {
-        child = parent.lastElementChild 
+        child = parent.lastElementChild ;
         parent.removeChild(child);
     }
 }
@@ -267,7 +271,7 @@ function storeScore(){
     var overide;
     var storageKeys = Object.keys(localStorage);
     storageKeys.forEach(element => {
-        var highscore = localStorage.getItem(element)
+        var highscore = localStorage.getItem(element);
         if(element ===  userAlias && currentScore <= highscore ){
            
             if(confirm("This score is lower than your current highscore. Overide "+userAlias+"'s previous high score with this lower score?") === true){
@@ -280,11 +284,11 @@ function storeScore(){
     });
 
     if (overide === false){
-        window.location="./assets/html/highscores.html"
+        window.location="./assets/html/highscores.html";
     } else {
         localStorage.setItem(userAlias,currentScore);
     }
-    window.location="./assets/html/highscores.html"
+    window.location="./assets/html/highscores.html";
 }
 
 //-----------------------event listeners-------------------
