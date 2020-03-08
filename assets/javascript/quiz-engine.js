@@ -74,10 +74,11 @@ function switchToResults(){
 
 function createQuestion() {
     //---------select static or dynamic question--------------------
-    randomN = Math.random();
-    combinationNumber = staticQuestionArray.length + dynamicQuestionArray.length;
-    console.log(staticQuestionArray.length/combinationNumber);
-    if (randomN > (staticQuestionArray.length/combinationNumber)){
+    var randomN = Math.random();
+    var combinationNumber = staticQuestionArray.length + dynamicQuestionArray.length;
+    console.log("randomNumber"+randomN);
+    console.log("check"+staticQuestionArray.length/combinationNumber);
+    if (randomN < (staticQuestionArray.length/combinationNumber)){
         //---------generate a static question----------------------------
         staticContentBox.setAttribute("class" , "show");
         dynamicContentBox.setAttribute("class", "hide");
@@ -223,8 +224,6 @@ function findCode(code){
 
 function validate(answer,questionProperties) {
     validationBox.setAttribute("class","show");
-    console.log(answer);
-    console.log(questionProperties.correctAnswer);
     if(JSON.stringify(answer) === JSON.stringify(questionProperties.correctAnswer)){
         validationContent.setAttribute("class", "correct");
         validationContent.textContent = "Correct!";
