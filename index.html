@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quizinc</title>
+    <!-- reset css -->
     <link rel="stylesheet" href="./assets/resets/reset.css">
+    <!-- custom css -->
     <link rel="stylesheet" href="./assets/css/style.css">
+    <!-- code mirror css -->
+    <link rel="stylesheet" href="./assets/css/codemirror.css">
+    <link rel="stylesheet" href="./assets/css/vscode-dark.css">
+    <!-- google font link -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Oxanium&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -21,7 +27,7 @@
                 </h2>
                 <div class="container">
                     <p class="preface-text">
-                        This quiz is a timed multiple choice selection. 
+                        This quiz is a timed questionaire that mixes functional code and multiple choice answers to test your knowledge of JavaScript. 
                     </p>
                     <p class="preface-text">
                         Upon answering one question,
@@ -37,15 +43,22 @@
             </article>
             <section class="flexbox">
                 <label for="start-quiz">Ready to test your skills?</label>
-                <button type="submit" id="start-quiz">Start quiz</button>
+                <button type="button" id="start-quiz">Start quiz</button>
             </section>
         </section>
 
         <section id="quiz-content" class="hide">
             <h1 id="timer">Time:<span id="time"></span></h1>
-            <section id="content-box">
-                <h2 id="question"></h2>
+            <section id="static-content-box" class="hide">
+                <h3 id="static-question"></h3>
                 <ol id="answer-box"></ol>
+            </section>
+            <section id="dynamic-content-box" class="hide">
+                <h3 id="dynamic-question"></h3>
+                <form>
+                    <textarea name="code-box" id="code-box" class="CodeMirror"></textarea>
+                    <button type="button" id="submit-code">Submit Code</button>
+                </form>
             </section>
         </section>
 
@@ -62,9 +75,22 @@
             <hr>
             <span id="validation-content"></span>
         </section>
+
+        <!-- <section class="flexbox" id="dynamic-test">
+            <label for="text-area" id=text-area-label style="padding:10px"></label>
+            <textarea class="CodeMirror" placeholder="type code here" id="text-area" rows="10" cols="100" style="border-radius: 10px; outline: none; width:100%;" class="codemirror"></textarea>
+            <button type="button" id="run-button">run code</button>
+        <section> -->
     </main>
 
+   
+<!-- js links -->
+    <!-- code mirror js files -->
+    <script src="./assets/javascript/codemirror.js"></script>
+    <script src="./assets/javascript/javascript.js"></script>
+    <!-- Custom js files -->
     <script src="./assets/javascript/quiz-source.js"></script>
     <script src="./assets/javascript/quiz-engine.js"></script>
+    <!-- <script src="./assets/javascript/textarea.js"></script> -->
 </body>
 </html>

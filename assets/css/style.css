@@ -11,7 +11,7 @@ font-family: 'Montserrat', sans-serif; */
 }
 
 main {
-    width: 100%;
+    width: fit-content;
     margin:20px auto;
     font-family: 'Montserrat',sans-serif;
 }
@@ -43,6 +43,12 @@ h2{
     font-family: 'Oxanium', cursive;
 }
 
+h3{
+    font-size: large;
+    font-family: 'Montserrat', sans-serif;
+    padding:20px 0px;
+}
+
 header {
     margin:-8px -8px 0 -8px;
     padding:20px 40px;
@@ -50,18 +56,26 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 10px solid slategray;
 }
 
+
 button, #answer-box>li {
+    font-size: large;
+    width:fit-content;
     margin:5px 0;
-    padding: 2.5px 5px;
+    padding: 10px;
     color: azure;
     background-color: slategray;
     border-radius: 5px;
-    border:2px solid black;
     transition: 200ms all linear;
     outline:none;
 }
+
+button {
+    border:2.5px solid black
+}
+
 button:hover, #answer-box>li:hover {
 background-color:hsl(210,13%,35%);
 cursor: pointer;
@@ -71,16 +85,15 @@ cursor: pointer;
     list-style-type: lower-latin;
     list-style-position: inside;
     margin-top: 20px;
-    text-align: left;
-    padding:none;
-    
-}
+    text-align: center;
+    /* padding:none; */
+} 
 
 #question{
     font-family: 'Montserrat', sans-serif;
 }
 
-#preface, #content-box, #results, #highscores-box{
+#preface, #static-content-box, #dynamic-content-box, #results, #highscores-box,#dynamic-test{
     text-align: center;
     border: 4px solid #dbdbdb;
     border-radius: 10px;
@@ -104,11 +117,13 @@ cursor: pointer;
 }
 
 #validation-content{
+    font-size: x-large;
     margin-top:10px;
     padding:5px;
 }
 
 #validation-box{
+    text-align: center;
     margin:0 20px;
     padding:1rem;
 }
@@ -148,31 +163,27 @@ cursor: pointer;
 }
 
 #start-quiz{
-    width: 60%;
+    width: fit-content;
     height:40px;
     font-size: x-large;
+    padding:0 20px 0 20px;
 }
 
 @media (min-width: 576px) {
-    #answer-box{
-        padding:0 10%;
-    }
-
+    
     main{
-        width:80%
+        max-width:80%;
     }
 }
 @media (min-width: 768px) {
     main{
-        width:60%
+        max-width:80%;
     }
 }
 @media (min-width: 992px) {
-    #answer-box{
-        padding:0 20%;
-    }
+  
     main{
-        width:50%
+        max-width:80%;
     }
 }
 @media (min-width: 1200px) {

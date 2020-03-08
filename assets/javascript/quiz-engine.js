@@ -3,8 +3,10 @@ var timer = document.getElementById("timer");
 var timeLeft = document.getElementById("time");
 var preface = document.getElementById("preface");
 var quizContent = document.getElementById("quiz-content");
-var questionTitle = document.getElementById("question");
+var staticQuestionTitle = document.getElementById("static-question");
+var dynamicQuestionTitle = document.getElementById("dynamic-question")
 var answerBox = document.getElementById("answer-box");
+var codeBox = document.getElementById("code-box");
 var validationBox = document.getElementById("validation-box");
 var validationContent =document.getElementById("validation-content");
 var startQuiz = document.getElementById("start-quiz");
@@ -12,24 +14,26 @@ var results = document.getElementById("results");
 var finalScore = document.getElementById("score");
 var scoreButton = document.getElementById("score-button");
 var scoreName = document.getElementById("score-name");
-
+var submitCode = document.getElementById("submit-code");
+var dynamicContentBox = document.getElementById("dynamic-content-box");
+var staticContentBox = document.getElementById("static-content-box");
+const Editor = CodeMirror.fromTextArea(codeBox, { lineNumbers: true, mode:"javascript",theme:"vscode-dark" });
+Editor.refresh();
 
 //Global Variables
-var time = 75; //in seconds
-var timePenalty = 15; //in Seconds
-var popupTime = 1500; //in milliseconds
-var questionArray = Object.keys(quizSource);
+var time = 300; //in seconds
+var timePenalty = 75; //in Seconds
+var popupTime = 2000; //in milliseconds
+var staticQuestionArray = Object.keys(quizSource);
+var dynamicQuestionArray = Object.keys(quizSourceDynamic);
+var isdynamic = true;
 //placholders
 var randomQuestionNumber;
 var popup;
 var score;
-var theInstruction = "alert('hello world');"
+var codeBox;
 
 //---------------------------functions---------------------
-
-function F(string){
-    return(string);
-}
 
 
 function startQuizProcess(){
@@ -69,50 +73,159 @@ function switchToResults(){
 
 
 function createQuestion() {
-    randomQuestionNumber = Math.floor(Math.random()*questionArray.length);
-    var selectedQuestion = questionArray[randomQuestionNumber];
-    var questionProperties = quizSource[selectedQuestion];
-    
-    options = [];
-    options = options.concat(questionProperties.incorrectOptions, questionProperties.correctAnswer);
+    //---------select static or dynamic question--------------------
+    randomN = Math.random();
+    combinationNumber = staticQuestionArray.length + dynamicQuestionArray.length;
+    console.log(staticQuestionArray.length/combinationNumber);
+    if (randomN > (staticQuestionArray.length/combinationNumber)){
+        //---------generate a static question----------------------------
+        staticContentBox.setAttribute("class" , "show");
+        dynamicContentBox.setAttribute("class", "hide");
+        isdynamic = false;
+        randomQuestionNumber = Math.floor(Math.random()*staticQuestionArray.length);
+        var selectedQuestion = staticQuestionArray[randomQuestionNumber];
+        var questionProperties = quizSource[selectedQuestion];
+        
+        var options = [];
+        options = options.concat(questionProperties.incorrectOptions, questionProperties.correctAnswer);
 
-    var iterationCount = options.length;
-    for (let i = 0; i < iterationCount; i++) {
-        var randomNumber = Math.floor(Math.random()*options.length);
-        liEl = document.createElement("li");
-        liEl.textContent =options[randomNumber];
-        options.splice(randomNumber,1);
-        answerBox.appendChild(liEl);
+        var iterationCount = options.length;
+        for (let i = 0; i < iterationCount; i++) {
+            var randomNumber = Math.floor(Math.random()*options.length);
+            var liEl = document.createElement("li");
+            liEl.textContent =options[randomNumber];
+            options.splice(randomNumber,1);
+            answerBox.appendChild(liEl);
+        }
+        staticQuestionTitle.textContent = questionProperties.questionTitle;
+
+    } else {
+        //-------------generate a dynamic question----------------------
+        staticContentBox.setAttribute("class" , "hide");
+        dynamicContentBox.setAttribute("class", "show");
+        isdynamic = true;
+        randomQuestionNumber = Math.floor(Math.random()*dynamicQuestionArray.length);
+        var selectedQuestion = dynamicQuestionArray[randomQuestionNumber];
+        console.log(selectedQuestion);
+        var questionProperties = quizSourceDynamic[selectedQuestion];
+        dynamicQuestionTitle.textContent = questionProperties.questionTitle;
     }
-    questionTitle.textContent = questionProperties.question;
+    
 }
 
 
 function checkAndUpdate(event){
-    var answer = event.target;
-    var parent = answer.parentElement;
-    var selectedQuestion = questionArray[randomQuestionNumber];
-    var questionProperties = quizSource[selectedQuestion];
+    // --------- if a static question, do a static check ---------
+    if (isdynamic === false){
+        var answer = event.target;
+        var parent = answer.parentElement;
+        var selectedQuestion = staticQuestionArray[randomQuestionNumber];
+        var questionProperties = quizSource[selectedQuestion];
 
-    if (answer.matches("li")){
-        validate(answer,questionProperties);
-        removeChildren(parent);
+        if (answer.matches("li")){
+            answer = answer.textContent;
+            validate(answer,questionProperties);
+            removeChildren(parent);
 
-        questionsLeft = questionArray.length
-        if(questionsLeft === 0) {
-            switchToResults();
+            questionsLeft = staticQuestionArray.length
+            if(questionsLeft === 0) {
+                switchToResults();
+                return;
+            }
+            staticQuestionArray = staticQuestionArray.filter(function(element,index,array){
+                return element !== selectedQuestion;
+            });
+            createQuestion();
+        }
+    } else {
+        // ------ else if a dynamic question, run the code and do a dynamic check----------
+            
+            var selectedQuestion = dynamicQuestionArray[randomQuestionNumber];
+            var questionProperties = quizSourceDynamic[selectedQuestion];
+            var answer = runCode(questionProperties);
+
+            validate(answer,questionProperties);
+
+            Editor.setValue("");
+            Editor.clearHistory();
+
+            questionsLeft = dynamicQuestionArray.length
+            if(questionsLeft === 0) {
+                switchToResults();
+                return;
+            }
+            dynamicQuestionArray = dynamicQuestionArray.filter(function(element,index,array){
+                return element !== selectedQuestion;
+            });
+            createQuestion();
+        }
+    } 
+    
+    
+function runCode(questionProperties){
+    check = questionProperties.check
+    var code = Editor.getValue();
+    args = findArguments(code);
+    functionCode = findCode(code);
+    var userFunction = new Function(...args,functionCode);
+    userAnswer = userFunction(check);
+    return userAnswer;
+}
+
+function findArguments(code){
+    const findFunction = code.indexOf('function');
+    const fOpeningBracket = code.indexOf("(",(findFunction+8));
+    const fClosingBracket = code.indexOf(")",(findFunction+8));
+    const argumentString = code.substring(fOpeningBracket,fClosingBracket);
+    const containsSemicolons = (argumentString.match(/;/g) || []).length;
+    if (containsSemicolons > 0){
+     throw "semicolons found in arguments"
+    }
+
+    function findBreakPoints(argumentString) {
+        const breakPoints = [0];
+        var position = 0;
+        while (position >= 0){
+            position = argumentString.indexOf(',',position+1);
+            if (position >= 0){
+                breakPoints.push(position);
+            } else {
+                breakPoints.push(argumentString.length);
+            }
+        }    
+         return breakPoints;
+    }
+    var breakPoints = findBreakPoints(argumentString);
+    console.log("break points: "+breakPoints);
+    function extractArguments(argumentString,breakPoints){
+        const functionArguments = [];
+        for (let i = 0; i < (breakPoints.length-1); i++) {
+                functionArguments[i] = argumentString.substring(breakPoints[i]+1,breakPoints[i+1]);
+        }
+        return functionArguments;
+    }
+    const functionArguments = extractArguments(argumentString,breakPoints)
+    return functionArguments;
+}
+
+function findCode(code){
+    const fOpeningBracket = code.indexOf("{");
+    const fClosingBracket = code.lastIndexOf("}");
+    const NumberOfOpeneningBrackets = (code.match(/{/g) || []).length;
+    const NumberOfClosingBrackets = (code.match(/}/g) || []).length;
+        if (NumberOfClosingBrackets !== NumberOfOpeneningBrackets){
             return;
         }
-        questionArray = questionArray.filter(function(element,index,array){
-            return element !== selectedQuestion;
-        });
-        createQuestion();
-    }
+    functionCode = code.substring(fOpeningBracket+1,fClosingBracket);
+    return functionCode;
 }
+
 
 function validate(answer,questionProperties) {
     validationBox.setAttribute("class","show");
-    if(answer.textContent === questionProperties.correctAnswer[0]){
+    console.log(answer);
+    console.log(questionProperties.correctAnswer);
+    if(JSON.stringify(answer) === JSON.stringify(questionProperties.correctAnswer)){
         validationContent.setAttribute("class", "correct");
         validationContent.textContent = "Correct!";
         score++;
@@ -168,3 +281,4 @@ function storeScore(){
 startQuiz.addEventListener("click", startQuizProcess);
 answerBox.addEventListener("click", checkAndUpdate);
 scoreButton.addEventListener("click", storeScore);
+submitCode.addEventListener("click",checkAndUpdate);
