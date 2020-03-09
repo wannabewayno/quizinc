@@ -249,7 +249,7 @@ function validate(answer,questionProperties) {
         validationContent.setAttribute("class", "correct");
         validationContent.textContent = "Correct!";
         if (isdynamic === true){
-            score += 5;
+            score += 6;
         } else {
             score++;
         }
