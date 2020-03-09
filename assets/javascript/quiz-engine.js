@@ -170,12 +170,12 @@ function runCode(questionProperties){
     var code = Editor.getValue();
     console.log("raw code: "+code);
     args = findArguments(code);
-    console.log("function arguments"+args);
+    console.log("FUNCTION ARGUMENTS: "+args);
     functionCode = findCode(code);
-    console.log("executable code"+functionCode);
+    console.log("EXECUTABLE CODE: "+functionCode);
     var userFunction = new Function(...args,functionCode);
-    console.log("userAnswer: "+userFunction(check));
     userAnswer = passAppropriateArguments(userFunction,check);
+    console.log("USER'S ANSWER: "+userAnswer);
     console.log("--------END runCode Properties------");
     return userAnswer;
 }
@@ -243,6 +243,8 @@ function findCode(code){
 
 function validate(answer,questionProperties) {
     validationBox.setAttribute("class","show");
+    console.log("USER'S ANSWER: "+answer);
+    console.log("CORRECT ANSWER: "+questionProperties.correctAnswer);
     if(compare(answer,questionProperties.correctAnswer)){
         validationContent.setAttribute("class", "correct");
         validationContent.textContent = "Correct!";
@@ -299,11 +301,15 @@ function storeScore(){
 
     if (overide === false){
         window.location="./assets/html/highscores.html";
-    } else {
-        localStorage.setItem(userAlias,currentScore);
+    } else if (userAlias === "") {
+            userAlias = prompt("please insert a name to store your score");
+            localStorage.setItem(userAlias,currentScore);
+        } else {
+            localStorage.setItem(userAlias,currentScore);
     }
-    window.location="./assets/html/highscores.html";
+        window.location="./assets/html/highscores.html";
 }
+
 
 //-----------------------event listeners-------------------
 startQuiz.addEventListener("click", startQuizProcess);
