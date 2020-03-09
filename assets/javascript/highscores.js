@@ -32,7 +32,7 @@ function addHighScores(){
         if (count%2 === 0){
             liEl.setAttribute("class","white-background");
         } else {
-            liEl.setAttribute("class","grey-background");
+            liEl.setAttribute("class","azure-background");
         }
         highScores.appendChild(liEl);
     });
