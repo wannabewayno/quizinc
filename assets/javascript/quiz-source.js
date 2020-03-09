@@ -192,7 +192,7 @@ quizSourceDynamic = {
     },
     question12:{
         questionTitle:"Write a function whose argument is an array of numbers and returns an array with only the prime numbers in that array",
-        correctAnswer:[2,17,193],
+        correctAnswer:[17,2,193],
         check:[[35,17,2,88,16,193,15]],
     },
     question13:{
