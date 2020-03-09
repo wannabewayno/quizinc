@@ -202,7 +202,7 @@ quizSourceDynamic = {
     },
     question14:{
         questionTitle:"Write a function whose argument takes a string and returns the first non-repeated character",
-        correctAnswer:"b",
+        correctAnswer:"g",
         check:"a lot of repeated characters in english except for bordeaux",
     },
     question15:{

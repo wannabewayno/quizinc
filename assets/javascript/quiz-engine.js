@@ -165,12 +165,31 @@ function checkAndUpdate(event){
     
 function runCode(questionProperties){
     check = questionProperties.check
+    console.log("-------RunCode Properties-----");
+    console.log("the check value:"+check);
     var code = Editor.getValue();
+    console.log("raw code: "+code);
     args = findArguments(code);
+    console.log("function arguments"+args);
     functionCode = findCode(code);
+    console.log("executable code"+functionCode);
     var userFunction = new Function(...args,functionCode);
-    userAnswer = userFunction(check);
+    console.log("userAnswer: "+userFunction(check));
+    userAnswer = passAppropriateArguments(userFunction,check);
+    console.log("--------END runCode Properties------");
     return userAnswer;
+}
+
+function passAppropriateArguments(userFunction,check){
+    if (typeof(check) === "number"){
+        return userFunction(check);
+    }
+    if (typeof(check) === "string"){
+        return userFunction(check);
+    }
+    if (typeof(check) === "object"){
+        return userFunction(...check);
+    }
 }
 
 function findArguments(code){
@@ -224,10 +243,14 @@ function findCode(code){
 
 function validate(answer,questionProperties) {
     validationBox.setAttribute("class","show");
-    if(JSON.stringify(answer) === JSON.stringify(questionProperties.correctAnswer)){
+    if(compare(answer,questionProperties.correctAnswer)){
         validationContent.setAttribute("class", "correct");
         validationContent.textContent = "Correct!";
-        score++;
+        if (isdynamic === true){
+            score += 5;
+        } else {
+            score++;
+        }
     } else {
         validationContent.setAttribute("class", "incorrect");
         validationContent.textContent = "no no no, you naughty goose";
@@ -241,6 +264,12 @@ function validate(answer,questionProperties) {
     },2000);
 }
 
+function compare(item1,item2) {
+    if (JSON.stringify(item1)===JSON.stringify(item2)){
+        return true;
+    }
+    return false;
+}
 
 function removeChildren(parent){
     iterationCount = parent.childElementCount;
