@@ -63,7 +63,7 @@ header {
 }
 
 
-button, #answer-box>li {
+#answer-box>li {
     font-size: large;
     width:fit-content;
     margin:5px 0;
@@ -75,13 +75,35 @@ button, #answer-box>li {
     outline:none;
 }
 
-button {
+button, #go-back{
+    font-family: 'Montserrat', sans-serif;
+    font-size: large;
+    width:fit-content;
+    margin:5px 0;
+    padding: 10px;
+    color: black;
+    background-color: white;
+    border-radius: 5px;
+    transition: 200ms all linear;
+    outline:none;
     border:2.5px solid black
 }
 
-button:hover, #answer-box>li:hover {
+#answer-box>li:hover {
 background-color:hsl(210,13%,35%);
 cursor: pointer;
+}
+
+#score-button, #score-name, #clear-scores,#go-back{
+    padding:5px;
+    margin:10px;
+}
+#go-back{
+    border-radius:5px;
+}
+#go-back:hover, button:hover {
+    cursor: pointer;
+    background-color: lightgrey;
 }
 
 #answer-box{
