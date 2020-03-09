@@ -68,8 +68,8 @@ header {
     width:fit-content;
     margin:5px 0;
     padding: 10px;
-    color: white;
-    background-color: slategray;
+    color: black;
+    background-color: deepskyblue;
     border-radius: 5px;
     transition: 200ms all linear;
     outline:none;
@@ -90,7 +90,7 @@ button, #go-back{
 }
 
 #answer-box>li:hover {
-background-color:hsl(210,13%,35%);
+background-color: lightsteelblue;
 cursor: pointer;
 }
 
