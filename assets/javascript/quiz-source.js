@@ -143,17 +143,17 @@ quizSourceDynamic = {
     question2:{
         questionTitle:"write a function whose argument takes in an Array of numbers and outputs only the even numbers in that array",
         correctAnswer:[2,138,22],
-        check:[2,5,37,138,9,22],
+        check:[[2,5,37,138,9,22]],
     },
     question3:{
         questionTitle:"write a function whose argument takes in a number N, and outputs an array of sequential numbers from 1 to N",
         correctAnswer:[1,2,3,4,5,6,7,8,9,10,11,12,13],
-        check:[13],
+        check:13,
     },
     question4:{
         questionTitle:"write a function whose argument takes in an array of numbers and returns an array with all numbers above 22",
         correctAnswer:[42,23,32,1003],
-        check:[42,0,4,18,23,21,9,4.5,6,32,1003],
+        check:[[42,0,4,18,23,21,9,4.5,6,32,1003]],
     },
     question5:{
         questionTitle:"Write a function whose argument takes a number and returns the reverse of that number E.g. 56789 -> 98765",
@@ -163,7 +163,7 @@ quizSourceDynamic = {
     question6:{
         questionTitle:"Write a function whose argument takes an array of strings and returns an array of booleans to check if they're palindromes or not. E.g [\"chair\",\"Hannah\"] would return [false,true]",
         correctAnswer:[false,true,false,true,false,false,false],
-        check:["football field","taco cat","this is not a palindrome","nurses run","airplane","Ducati","wine bottle"],
+        check:[["football field","taco cat","this is not a palindrome","nurses run","airplane","Ducati","wine bottle"]],
     },
     question7:{
         questionTitle:"Write a function whose argument takes a string and returns that string in alphabetical order without spaces. e.g \"this example\" = \"aeehilmpstx\"",
@@ -193,7 +193,7 @@ quizSourceDynamic = {
     question12:{
         questionTitle:"Write a function whose argument is an array of numbers and returns an array with only the prime numbers in that array",
         correctAnswer:[2,17,193],
-        check:[35,17,2,88,16,193,15],
+        check:[[35,17,2,88,16,193,15]],
     },
     question13:{
         questionTitle:"Write a function whose argument is a number N, and returns the N rows by N columns identity matrix",
